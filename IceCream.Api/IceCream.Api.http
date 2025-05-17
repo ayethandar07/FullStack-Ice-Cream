@@ -1,0 +1,6 @@
+@IceCream.Api_HostAddress = http://localhost:5147
+
+GET {{IceCream.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
