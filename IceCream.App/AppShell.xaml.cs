@@ -1,10 +1,29 @@
-﻿namespace IceCream.App
+﻿using IceCream.App.Pages;
+
+namespace IceCream.App;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
+        InitializeComponent();
+        RegisterRoutes();
+    }
+
+    private readonly static Type[] _routablePageTypes = 
+        [
+            typeof(SigninPage),
+            typeof(SignupPage),
+            typeof(MyOrdersPage),
+            typeof(OrderDetailsPage),
+            typeof(DetailsPage),
+        ];
+
+    private static void RegisterRoutes()
+    {
+        foreach (var pageType in _routablePageTypes)
         {
-            InitializeComponent();
+            Routing.RegisterRoute(pageType.Name, pageType);
         }
     }
 }
