@@ -2,26 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="IceCream.App.Pages.OnBoardingPage"
-             Title="OnBoardingPage">
-    <VerticalStackLayout Spacing="25">
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Shell.NavBarIsVisible="False">
 
-        <Button Text="Signin"
-                Clicked="Signin_Clicked"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"/>
-
-        <Button Text="Signup"
-                Clicked="Signup_Clicked"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"/>
-        
-        <Button Text="Go to App"
-                Clicked="Button_Clicked"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"/>
-    </VerticalStackLayout>
+    <Grid RowDefinitions="*, Auto"
+          Padding="0, 0, 0, 40">
+        <VerticalStackLayout Grid.Row="0" 
+                             Spacing="20"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+            <Image Source="ice_cream"
+                   HeightRequest="250"
+                   WidthRequest="250"
+                   Aspect="AspectFit"/>
+            <Label Text="Welcome"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+            <Label Text="MAUI ICE CREAM"
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+            <Label Text="Home of delicious Ice Creams"
+                   FontSize="18"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="20">
+            <Button Text="Signup" Clicked="Signup_Clicked"/>
+            <Button Text="Signin" Clicked="Signin_Clicked"/>
+        </VerticalStackLayout>
+    </Grid>
+    
 </ContentPage>
