@@ -1,4 +1,7 @@
 using IceCream.Api.Data;
+using IceCream.Api.Endpoints;
+using IceCream.Api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,18 @@ builder.Services.AddSwaggerGen();
 string connectionString = builder.Configuration.GetConnectionString("IceCream") ?? "";
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(jwtOptions =>
+    jwtOptions.TokenValidationParameters = TokenService.GetTokenValidationParameters(builder.Configuration));
+builder.Services.AddAuthorization();
+
+builder.Services.AddTransient<TokenService>()
+                .AddTransient<PasswordService>()
+                .AddTransient<AuthService>();
+
 var app = builder.Build();
 
 MigrateDatabase(app.Services);
@@ -25,6 +40,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapEndpoints();
 
 app.UseAuthorization();
 
