@@ -117,7 +117,7 @@
                 Padding="10"
                 StrokeThickness="0">
             <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Image Source="ice_cream"
+                <Image Source="icecream"
                        HeightRequest="150"
                        WidthRequest="150"
                        HorizontalOptions="Center"/>

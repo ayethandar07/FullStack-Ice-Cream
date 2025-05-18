@@ -10,7 +10,7 @@
                              Spacing="20"
                              HorizontalOptions="Center"
                              VerticalOptions="Center">
-            <Image Source="ice_cream"
+            <Image Source="icecream"
                    HeightRequest="250"
                    WidthRequest="250"
                    Aspect="AspectFit"/>
