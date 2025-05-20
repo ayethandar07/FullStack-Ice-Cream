@@ -38,7 +38,10 @@ public static class MauiProgram
         builder.Services.AddTransient<OnBoardingPage>();
 
         builder.Services.AddSingleton<HomeViewModel>()
-                        .AddSingleton<HomePage>(); 
+                        .AddSingleton<HomePage>();
+
+        builder.Services.AddTransient<DetailsViewModel>()
+                        .AddTransient<DetailsPage>();
 
         ConfigureRefit(builder.Services);
 
@@ -76,6 +79,12 @@ public static class MauiProgram
             var baseUrl = DeviceInfo.Platform == DevicePlatform.Android
                                 ? "https://10.0.2.2:7274"
                                 : "https://localhost:7274";
+
+            if (DeviceInfo.DeviceType == DeviceType.Physical)
+            {
+                baseUrl = "https://g899m819-7274.inc1.devtunnels.ms";
+            }
+
             httpClient.BaseAddress = new Uri(baseUrl);
         }
     }

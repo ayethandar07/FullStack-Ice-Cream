@@ -10,6 +10,9 @@ public partial class BaseViewModel: ObservableObject
     protected static async Task GoToAsync(string url, bool animate = false) =>
         await Shell.Current.GoToAsync(url, animate);
 
+    protected static async Task GoToAsync(string url, bool animate, IDictionary<string, object> parameter) =>
+        await Shell.Current.GoToAsync(url, animate, parameter);
+
     protected static async Task ShowErrorAlertAsync(string errorMessage) =>
         await Shell.Current.DisplayAlert("Error", errorMessage, "Ok");
 
