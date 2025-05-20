@@ -10,62 +10,73 @@ using System.Net.Security;
 using Xamarin.Android.Net;
 #endif
 
-namespace IceCream.App
+namespace IceCream.App;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                })
-                .UseMauiCommunityToolkit();
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            })
+            .UseMauiCommunityToolkit();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+		builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddTransient<AuthViewModel>()
-                            .AddTransient<SignupPage>()
-                            .AddTransient<SigninPage>();
-            ConfigureRefit(builder.Services);
+        builder.Services.AddTransient<AuthViewModel>()
+                        .AddTransient<SignupPage>()
+                        .AddTransient<SigninPage>();
 
-            return builder.Build();
-        }
+        builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddTransient<OnBoardingPage>();
 
-        private static void ConfigureRefit(IServiceCollection services)
+        builder.Services.AddSingleton<HomeViewModel>()
+                        .AddSingleton<HomePage>(); 
+
+        ConfigureRefit(builder.Services);
+
+        return builder.Build();
+    }
+
+    private static void ConfigureRefit(IServiceCollection services)
+    {
+        var refitSettings = new RefitSettings
         {
-            var refitSettings = new RefitSettings
+            HttpMessageHandlerFactory = () =>
             {
-                HttpMessageHandlerFactory = () =>
-                {
 #if ANDROID
-                    return new AndroidMessageHandler
-                    {
-                        ServerCertificateCustomValidationCallback = (httpRequestMessage, certificate, chain, sslPolicyErrors) =>
-                        {
-                            return certificate?.Issuer == "CN=localhost" || sslPolicyErrors == SslPolicyErrors.None;
-                        }
-                    };
-#endif
-                    return null;
-                }
-
-            };
-
-            services.AddRefitClient<IAuthApi>(refitSettings)
-                .ConfigureHttpClient(httpClient =>
+                return new AndroidMessageHandler
                 {
-                    var baseUrl = DeviceInfo.Platform == DevicePlatform.Android 
-                                    ? "https://10.0.2.2:7274"
-                                    : "https://localhost:7274";
-                    httpClient.BaseAddress = new Uri(baseUrl);
-                });
+                    ServerCertificateCustomValidationCallback = (httpRequestMessage, certificate, chain, sslPolicyErrors) =>
+                    {
+                        return certificate?.Issuer == "CN=localhost" || sslPolicyErrors == SslPolicyErrors.None;
+                    }
+                };
+#endif
+                return null;
+            }
+
+        };
+
+        services.AddRefitClient<IAuthApi>(refitSettings)
+            .ConfigureHttpClient(SetHttpClient);
+
+        services.AddRefitClient<IIcecreamApi>(refitSettings)
+            .ConfigureHttpClient(SetHttpClient);
+
+        static void SetHttpClient(HttpClient httpClient)
+        {
+            var baseUrl = DeviceInfo.Platform == DevicePlatform.Android
+                                ? "https://10.0.2.2:7274"
+                                : "https://localhost:7274";
+            httpClient.BaseAddress = new Uri(baseUrl);
         }
     }
 }

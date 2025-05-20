@@ -7,12 +7,6 @@
              Shell.FlyoutBehavior="Disabled"
              x:DataType="vm:AuthViewModel">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    
     <Grid>
         <VerticalStackLayout VerticalOptions="Center"
                              Padding="20"
@@ -51,9 +45,6 @@
                     IsEnabled="{Binding CanSignup}"
                     Command="{Binding SignupCommand}"/>
         </VerticalStackLayout>
-        <ActivityIndicator HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           Color="DeepPink"
-                           IsRunning="{Binding IsBusy}"/>
+        <ActivityIndicator IsRunning="{Binding IsBusy}"/>
     </Grid>
 </ContentPage>

@@ -6,9 +6,10 @@ using IceCream.Shared.Dtos;
 
 namespace IceCream.App.ViewModels;
 
-public partial class AuthViewModel(IAuthApi authApi) : BaseViewModel
+public partial class AuthViewModel(IAuthApi authApi, AuthService authService) : BaseViewModel
 {
     private readonly IAuthApi _authApi = authApi;
+    private readonly AuthService _authService = authService;
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(CanSignup))]
     private string? _name;
@@ -34,12 +35,13 @@ public partial class AuthViewModel(IAuthApi authApi) : BaseViewModel
         IsBusy = true;
         try
         {
-            var signupDto = new SignupRequestDto(Name!, Email!, Password!, Address!);
+            var signupDto = new SignupRequestDto(Name, Email, Password, Address);
             var result = await _authApi.SignupAsync(signupDto);
 
             if (result.IsSuccess)
             {
-                await ShowAlertAsync(result.Data.Token);
+                _authService.Signin(result.Data);
+
                 // Navigate to Home page
                 await GoToAsync($"//{nameof(HomePage)}", animate: true);
             }
@@ -65,12 +67,12 @@ public partial class AuthViewModel(IAuthApi authApi) : BaseViewModel
         IsBusy = true;
         try
         {
-            var signinDto = new SigninRequestDto(Email!, Password!);
+            var signinDto = new SigninRequestDto(Email, Password);
             var result = await _authApi.SigninAsync(signinDto);
 
             if (result.IsSuccess)
             {
-                await ShowAlertAsync(result.Data.User.Name);
+                _authService.Signin(result.Data);
                 // Navigate to Home page
                 await GoToAsync($"//{nameof(HomePage)}", animate: true);
             }

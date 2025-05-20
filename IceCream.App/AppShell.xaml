@@ -16,7 +16,8 @@
     
     <ShellContent ContentTemplate="{DataTemplate pages:OnBoardingPage}" 
                   Shell.FlyoutBehavior="Disabled"
-                  Shell.FlyoutItemIsVisible="False"/>
+                  Shell.FlyoutItemIsVisible="False"
+                  Route="OnBoardingPage"/>
 
     <TabBar FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent

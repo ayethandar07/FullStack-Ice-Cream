@@ -1,12 +1,15 @@
-﻿namespace IceCream.App
+﻿using IceCream.App.Services;
+
+namespace IceCream.App
 {
     public partial class App : Application
     {
-        public App()
+        public App(AuthService authService)
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            authService.Initialize();
+            MainPage = new AppShell(authService);
         }
     }
 }
