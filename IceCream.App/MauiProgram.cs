@@ -24,7 +24,13 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             })
-            .UseMauiCommunityToolkit();
+            .UseMauiCommunityToolkit()
+            .ConfigureMauiHandlers(h =>
+            {
+#if ANDROID
+                h.AddHandler<Shell, TabbarBadgeRender>();
+#endif
+            });
 
 #if DEBUG
 		builder.Logging.AddDebug();
@@ -43,6 +49,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DetailsViewModel>()
                         .AddTransient<DetailsPage>();
 
+        builder.Services.AddSingleton<CartViewModel>();
         ConfigureRefit(builder.Services);
 
         return builder.Build();

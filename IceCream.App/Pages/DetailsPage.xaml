@@ -130,7 +130,7 @@
                         </ImageButton.Behaviors>
                     </ImageButton>
                 </Grid>
-                <Button Text="Add to Cart"/>
+                <Button Text="Add to Cart" Command="{Binding AddToCardCommand}"/>
             </VerticalStackLayout>
 
             <ImageButton Source="cross"
